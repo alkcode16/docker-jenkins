@@ -1,0 +1,14 @@
+USUARIOS_ROLES
+JENKINS
+
+
+# JENKINS
+JENKINS_CI/jenkins_data
+JENKINS_CI/github.cer
+JENKINS_CI/issste.gob.mx.2025.cer
+JENKINS_CI/My_CA_FWeb_Public.cer
+
+# POSTGRESQL
+
+POSTGRESQL/pgadmin
+POSTGRESQL/postgres

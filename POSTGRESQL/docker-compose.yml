@@ -1,0 +1,51 @@
+services:
+  db:
+    container_name: postgres_db_usuarios
+    image: postgres:15.1
+    restart: always
+    ports:
+      - 5433:5432
+    volumes:
+      # - db_data:/var/lib/postgresql/data
+      # - ./dbfiles:/docker-entrypoint-initdb.d
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=gestion_usuarios_db
+      - POSTGRES_USER=disenio
+      - POSTGRES_PASSWORD=d153N10
+    # command: bash -c "echo 'host all all 0.0.0.0/0 md5' >> /var/lib/postgresql/data/pg_hba.conf && postgres"
+    # command: bash -c "echo 'host all all 0.0.0.0/0 md5' >> /var/lib/postgresql/data/postgresql.conf"
+    #  echo "host all all 0.0.0.0/0 md5" >> /var/lib/postgresql/data/pg_hba.conf
+    # entrypoint: ["/docker-entrypoint-initdb.d/init.sh"]
+
+    # Restablecer el servidor: pg_ctl restart
+    networks:
+      # - pgAdmin_postgres
+      - red_compartida
+
+
+  pgAdmin:
+    container_name: pgadmin
+    depends_on:
+      - db
+    image: dpage/pgadmin4:8.14.0
+    ports:
+      - "8090:80"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=diseno_sistema@issste.gob.mx
+      - PGADMIN_DEFAULT_PASSWORD=diseno2025
+    networks:
+      # - pgAdmin_postgres
+      - red_compartida
+    
+
+# networks:
+#   pgAdmin_postgres:
+networks:
+  red_compartida:
+    external: true
+
+######COMANDO PARA CREAR LA RED COMPARTIDA 
+# docker network create red_compartida
