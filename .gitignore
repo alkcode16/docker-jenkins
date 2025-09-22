@@ -3,6 +3,7 @@ JENKINS
 
 
 # JENKINS
+JENKINS_CI/certs/*
 JENKINS_CI/jenkins_data
 JENKINS_CI/github.cer
 JENKINS_CI/issste.gob.mx.2025.cer
@@ -12,3 +13,11 @@ JENKINS_CI/My_CA_FWeb_Public.cer
 
 POSTGRESQL/pgadmin
 POSTGRESQL/postgres
+
+# Ignorar archivos
+JENKINS_CI/certs/ca-key.pem 
+JENKINS_CI/certs/ca.srl
+JENKINS_CI/certs/client.csr
+JENKINS_CI/certs/server-cert.pem
+JENKINS_CI/certs/server-key.pem
+JENKINS_CI/certs/server.csr

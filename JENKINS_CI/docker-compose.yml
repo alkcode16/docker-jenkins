@@ -5,41 +5,83 @@ services:
       dockerfile: Dockerfile
     image: jenkins:v1.0
     container_name: jenkins_ci
+    # user: root
     ports:
-      - "8080:8080"   # Puerto web de Jenkins
-      - "50000:50000" # Puerto para agentes
+      - "8080:8080"
+      - "50000:50000"
       - "8443:8443"
     
     networks:
-      - red_compartida # Nombre de la red para que pueda visualizarse entre contenedores Jenkins y postgres
+      - red_compartida
     volumes:
       - ./jenkins_data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  # Permite a Jenkins usar Docker del host
-    # environment:
-    #   - JAVA_OPTS=-Djenkins.install.runSetupWizard=true //No pide contraseña
-  
-  
-  # sonarqube:
-  #   image: sonarqube:9.9.8-community
-  #   container_name: sonarqube_server
-  #   ports:
-  #     - "9000:9000"
+      # Mapeo del socket de Docker del host
+      - /var/run/docker.sock:/var/run/docker.sock
+      # La línea de 'certs' ahora es innecesaria y puede ser eliminada
+      # - ./certs:/certs/client:ro
+    
+  # docker:
+  #   image: docker:dind
+  #   privileged: true
+  #   expose:
+  #     - "2375"
   #   environment:
-  #     - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
-  #   networks:
-  #     - ci-net
+  #     - DOCKER_TLS_CERTDIR=
 
+    
 volumes:
   jenkins_home:
 
-networks: #Configuracion de la red compartida
+networks:
   red_compartida:
     external: true
+    
+# services:
+#   jenkins:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: jenkins:v1.0
+#     container_name: jenkins_ci
+#     ports:
+#       - "8080:8080"   # Puerto web de Jenkins
+#       - "50000:50000" # Puerto para agentes
+#       - "8443:8443"
+    
+#     networks:
+#       - red_compartida # Nombre de la red para que pueda visualizarse entre contenedores Jenkins y postgres
+#     volumes:
+#       - ./jenkins_data:/var/jenkins_home
+#     # Mapeo del socket de Docker del host
+#       - /var/run/docker.sock:/var/run/docker.sock  # Permite a Jenkins usar Docker del host
+#     # Mapeo de la carpeta 'certs' a una ubicación dentro del contenedor
+#       - ./certs:/certs/client:ro
+#     # environment:
+#     #   - JAVA_OPTS=-Djenkins.install.runSetupWizard=true //No pide contraseña
+#     environment:
+#     # Variables para configurar la conexión Docker con TLS
+#       - DOCKER_HOST=tcp://host.docker.internal:2376
+#       - DOCKER_TLS_VERIFY=1
+#       - DOCKER_CERT_PATH=/certs/client
+  
+  
+#   # sonarqube:
+#   #   image: sonarqube:9.9.8-community
+#   #   container_name: sonarqube_server
+#   #   ports:
+#   #     - "9000:9000"
+#   #   environment:
+#   #     - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+#   #   networks:
+#   #     - ci-net
 
-# Copiar los certificados SSL al contenedor
-# COPY ./github.cer /usr/local/share/ca-certificates/github.crt
-# COPY ./issste.gob.mx.2025.cer /usr/local/share/ca-certificates/issste.gob.mx.2025.crt
+# volumes:
+#   jenkins_home:
 
+# networks: #Configuracion de la red compartida
+#   red_compartida:
+#     external: true
 
-# My_CA_FWeb_Public
-
+# # Copiar los certificados SSL al contenedor
+# # COPY ./github.cer /usr/local/share/ca-certificates/github.crt
+# # COPY ./issste.gob.mx.2025.cer /usr/local/share/ca-certificates/issste.gob.mx.2025.crt
