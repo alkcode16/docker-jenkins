@@ -1,5 +1,6 @@
 services:
   jenkins:
+    privileged: true
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,6 +12,10 @@ services:
       - "50000:50000"
       - "8443:8443"
     
+    #Se agrego para ver si funciona
+    environment:
+      - DOCKER_HOST=tcp://host.docker.internal:2375
+
     networks:
       - red_compartida
     volumes:
@@ -18,15 +23,17 @@ services:
       # Mapeo del socket de Docker del host
       - /var/run/docker.sock:/var/run/docker.sock
       # La línea de 'certs' ahora es innecesaria y puede ser eliminada
-      # - ./certs:/certs/client:ro
-    
-  # docker:
-  #   image: docker:dind
-  #   privileged: true
-  #   expose:
-  #     - "2375"
-  #   environment:
-  #     - DOCKER_TLS_CERTDIR=
+      # - ./certs:/certs/client:ro  
+  
+  # docker-dind:
+  #     image: docker:dind
+  #     privileged: true
+  #     environment:
+  #       - DOCKER_TLS_CERTDIR=""
+  #     ports:
+  #       - "2375:2375"
+
+
 
     
 volumes:
